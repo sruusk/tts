@@ -1,6 +1,5 @@
 const path = require('path');
 const fs = require('fs');
-const etag = require('etag');
 
 const NOT_FOUND_TEMPLATE = path.resolve(__dirname, '../public/404.html');
 
@@ -120,15 +119,6 @@ const renderFile = (filePath, contentType, response) => {
             }
 
             return response.end();
-        }
-        if(process.env.ENABLE_CACHING) {
-            const tag = etag(content);
-            if(response.getHeader('If-None-Match') === tag) {
-                response.statusCode = 304;
-                response.end();
-                return;
-            }
-            response.setHeader('ETag', tag);
         }
         const status = filePath !== NOT_FOUND_TEMPLATE ? 200 : 404;
         response.writeHead(status, {'Content-Type': contentType});
