@@ -5,7 +5,7 @@ const speechConfig = sdk.SpeechConfig.fromSubscription(process.env.SPEECH_KEY, "
 speechConfig.speechSynthesisOutputFormat = sdk.SpeechSynthesisOutputFormat.Audio48Khz192KBitRateMonoMp3;
 
 const getTTS = (text, voiceName) => {
-    console.log(`Synthesizing speech for text: ${text}`);
+    console.log(`Synthesizing speech for text: ${text} with voice: ${voiceName}`);
     speechConfig.speechSynthesisVoiceName = voiceName;
     const synthesizer = new sdk.SpeechSynthesizer(speechConfig);
     return new Promise((resolve, reject) => {
