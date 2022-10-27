@@ -5,7 +5,7 @@ const endpoint = 'https://ts3ld.cognitiveservices.azure.com/';
 const textAnalyticsClient = new TextAnalyticsClient(endpoint, new AzureKeyCredential(key));
 
 const detectLanguage = (text) => {
-    text = text.replace(' by ', ' tekijältä ');
+    text = text.replace(' by ', ' ');
     return new Promise((resolve, reject) => {
         textAnalyticsClient.detectLanguage([text]).then(languageResult => {
             resolve(languageResult[0].primaryLanguage);
