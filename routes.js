@@ -96,7 +96,7 @@ const handleRequest = async (request, response) => {
             'Content-Length': stream.readableLength,
             'Access-Control-Allow-Origin': '*'
         });
-        stream.pipe(response);
+        return stream.pipe(response);
     }
 
     if (method.toUpperCase() === 'POST' && !(filePath in allowedMethods)) {
