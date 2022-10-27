@@ -73,13 +73,21 @@ const handleRequest = async (request, response) => {
     const {url, method, headers} = request;
     const filePath = new URL(url, `http://${headers.host}`).pathname;
 
-    if(filePath.startsWith('/api/tts')){
+    if(filePath.startsWith('/api/tts') && method === 'GET'){
+        if(headers['sec-fetch-dest'] === 'document') {
+            response.writeHead(200, {'Content-Type': 'audio/mpeg'});
+            return response.end();
+        }
+
         const text = requestUtils.getQueryParams(request).get('text');
         if(!text){
             console.error('Missing text', url);
             responseUtils.badRequest(response);
         }
-        const stream = await tts.getTTS(text);
+        const stream = await tts.getTTS(text).catch(e => {
+            console.error(e);
+            responseUtils.internalServerError(response);
+        });
         if(!stream){
             responseUtils.internalServerError(response);
         }
@@ -88,7 +96,7 @@ const handleRequest = async (request, response) => {
             'Content-Length': stream.readableLength,
             'Access-Control-Allow-Origin': '*'
         });
-        return stream.pipe(response);
+        stream.pipe(response);
     }
 
     if (method.toUpperCase() === 'POST' && !(filePath in allowedMethods)) {
