@@ -75,12 +75,14 @@ const handleRequest = async (request, response) => {
 
     if(filePath.startsWith('/api/tts')){
         const text = requestUtils.getQueryParams(request).get('text');
-        const voiceName = requestUtils.getQueryParams(request).get('voiceName');
-        if(!text || !voiceName){
-            console.error('Missing text or voiceName', url);
+        if(!text){
+            console.error('Missing text', url);
             responseUtils.badRequest(response);
         }
-        const stream = await tts.getTTS(text, voiceName);
+        const stream = await tts.getTTS(text);
+        if(!stream){
+            responseUtils.internalServerError(response);
+        }
         response.writeHead(200, {
             'Content-Type': 'audio/mp3',
             'Content-Length': stream.readableLength,
