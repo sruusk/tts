@@ -1,20 +1,3 @@
-const jwt = require('jsonwebtoken');
-
-/**
- * Decode and return authorization token
- * from the Authorization header.
- *
- * @param {http.IncomingMessage} request Incoming request.
- * @returns {string|null} jwt verified token or null if header is missing
- */
-const getAuthorization = request => {
-    try{
-        return jwt.verify(request.headers.authorization, process.env.JWT_SECRET);
-    } catch (e){
-        return null;
-    }
-};
-
 
 /**
  * Does the client accept JSON responses?
@@ -83,4 +66,10 @@ const parseBodyJson = request => {
     });
 };
 
-module.exports = { getAuthorization, acceptsJson, isJson, parseBodyJson };
+// eslint-disable-next-line jsdoc/require-jsdoc
+function getQueryParams(request) {
+    const url = new URL(request.url, `http://${request.headers.host}`);
+    return url.searchParams;
+}
+
+module.exports = { getQueryParams, acceptsJson, isJson, parseBodyJson };

@@ -1,7 +1,7 @@
 const responseUtils = require('./utils/responseUtils');
 const {renderPublic} = require('./utils/render');
 const requestUtils = require('./utils/requestUtils');
-const helloWorldController = require('./controllers/helloWorld');
+const tts = require('./controllers/tts');
 
 /**
  * Known API routes and their allowed methods
@@ -10,7 +10,7 @@ const helloWorldController = require('./controllers/helloWorld');
  * in response to an OPTIONS request by sendOptions() (Access-Control-Allow-Methods)
  */
 const allowedMethods = {
-    '/api/hello': ['GET']
+    '/api/tts': ['GET']
 };
 
 /**
@@ -72,30 +72,16 @@ const redirectHttp = (request, response) => {
 const handleRequest = async (request, response) => {
     const {url, method, headers} = request;
     const filePath = new URL(url, `http://${headers.host}`).pathname;
-    // serve static files from public/ and return immediately
-    if (method.toUpperCase() === 'GET' && !filePath.startsWith('/api')) {
-        try{
-            response.setHeader("Content-Security-Policy", "default-src 'none'; connect-src 'self' *.google-analytics.com;" +
-                " base-uri 'self'; form-action 'self'; manifest-src 'self'; script-src 'self';" +
-                " img-src 'self' data:; font-src 'self'; style-src 'self';" +
-                " frame-ancestors 'none'; frame-src 'self';");
-            response.setHeader("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
-            response.setHeader("X-Content-Type-Options", "nosniff");
-            response.setHeader("X-Frame-Options", "DENY");
-            response.setHeader("X-XSS-Protection", "1; mode=block");
-            response.setHeader("Referrer-Policy", "no-referrer");
-            if(process.env.ENABLE_CACHING){
-                // ETag will be set when the file is read for serving in render.js -> renderFile()
-                response.setHeader("Cache-Control", `public, max-age=${24 * 60 * 60}`);
-                // Copy If-None-Match header from request to response so that it can be used in render.js -> renderFile()
-                if(Object.keys(request.headers).includes('if-none-match'))
-                    response.setHeader("If-None-Match", request.headers['if-none-match']);
-            }
-        }catch (e) {
-            console.log(e);
-        }
-        const fileName = filePath === '/' || filePath === '' ? 'index.html' : filePath;
-        return renderPublic(fileName, response);
+
+    if(filePath.startsWith('/api/tts')){
+        const text = requestUtils.getQueryParams(request).get('text');
+        const stream = await tts.getTTS(text);
+        response.writeHead(200, {
+            'Content-Type': 'audio/mp3',
+            'Content-Length': stream.readableLength,
+            'Access-Control-Allow-Origin': '*'
+        });
+        return stream.pipe(response);
     }
 
     if (method.toUpperCase() === 'POST' && !(filePath in allowedMethods)) {
