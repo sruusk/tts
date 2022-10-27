@@ -5,9 +5,10 @@ const endpoint = 'https://ts3ld.cognitiveservices.azure.com/';
 const textAnalyticsClient = new TextAnalyticsClient(endpoint, new AzureKeyCredential(key));
 
 const detectLanguage = (text) => {
+    text = text.replace(' by ', ' ');
     return new Promise((resolve, reject) => {
         textAnalyticsClient.detectLanguage([text]).then(languageResult => {
-            resolve(languageResult[0].primaryLanguage.iso6391Name);
+            resolve(languageResult[0]);
         }).catch(err => {
             console.log(err);
             reject(err);
@@ -24,8 +25,8 @@ speechConfig.speechSynthesisOutputFormat = sdk.SpeechSynthesisOutputFormat.Audio
 const getTTS = async (text) => {
     let voiceName = 'en-AU-WilliamNeural';
     const language = await detectLanguage(text);
-    if(language === 'fi') voiceName = 'fi-FI-HarriNeural';
-    console.log(`Synthesizing speech for text: ${text} in language ${language} with voice ${voiceName}`);
+    if(language.iso6391Name === 'fi') voiceName = 'fi-FI-HarriNeural';
+    console.log(`Synthesizing speech for text: ${text} in language ${language.name} with voice ${voiceName}`);
     speechConfig.speechSynthesisVoiceName = voiceName;
     const synthesizer = new sdk.SpeechSynthesizer(speechConfig);
     return new Promise((resolve, reject) => {
