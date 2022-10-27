@@ -2,11 +2,11 @@ const { PassThrough } = require('stream');
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
 //Find your key and resource region under the 'Keys and Endpoint' tab in your Speech resource in Azure Portal
 const speechConfig = sdk.SpeechConfig.fromSubscription(process.env.SPEECH_KEY, "northeurope");
-speechConfig.speechSynthesisVoiceName = "fi-FI-HarriNeural";
 speechConfig.speechSynthesisOutputFormat = sdk.SpeechSynthesisOutputFormat.Audio48Khz192KBitRateMonoMp3;
 
-const getTTS = (text) => {
+const getTTS = (text, voiceName) => {
     console.log(`Synthesizing speech for text: ${text}`);
+    speechConfig.speechSynthesisVoiceName = voiceName;
     const synthesizer = new sdk.SpeechSynthesizer(speechConfig);
     return new Promise((resolve, reject) => {
         synthesizer.speakTextAsync(
