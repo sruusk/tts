@@ -84,7 +84,7 @@ const handleRequest = async (request, response) => {
             responseUtils.internalServerError(response);
         }
         response.writeHead(200, {
-            'Content-Type': 'audio/mp3',
+            'Content-Type': 'audio/mpeg',
             'Content-Length': stream.readableLength,
             'Access-Control-Allow-Origin': '*'
         });

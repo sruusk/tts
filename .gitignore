@@ -42,3 +42,6 @@ package-lock.json
 *.code-workspace
 Thumbs.db
 out
+
+# PM2 config
+ecosystem.config.js
