@@ -26,7 +26,7 @@ const speechConfig = sdk.SpeechConfig.fromSubscription(process.env.SPEECH_KEY, "
 speechConfig.speechSynthesisOutputFormat = sdk.SpeechSynthesisOutputFormat.Audio48Khz192KBitRateMonoMp3;
 
 const getTTS = async (text) => {
-    let voiceName = 'en-NZ-MitchellNeural';
+    let voiceName = 'en-AU-WilliamNeural';
     const language = await detectLanguage(text);
     if(language === 'fi') voiceName = 'fi-FI-HarriNeural';
     console.log(`Synthesizing speech for text: ${text} with voice: ${voiceName}`);
