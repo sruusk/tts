@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "nodemon": "nodemon --ignore public/ index.js",
-    "install-production": "npm install --production",
-    "install": "node scripts/install.js"
+    "install-production": "npm install --production"
   },
   "keywords": [],
   "license": "MIT",
