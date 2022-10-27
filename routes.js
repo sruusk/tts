@@ -82,7 +82,7 @@ const handleRequest = async (request, response) => {
         }
         const stream = await tts.getTTS(text, voiceName);
         response.writeHead(200, {
-            'Content-Type': 'audio/mp3',
+            'Content-Type': 'audio/mpeg',
             'Content-Length': stream.readableLength,
             'Access-Control-Allow-Origin': '*'
         });
