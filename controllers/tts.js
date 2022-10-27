@@ -7,10 +7,6 @@ const textAnalyticsClient = new TextAnalyticsClient(endpoint, new AzureKeyCreden
 const detectLanguage = (text) => {
     return new Promise((resolve, reject) => {
         textAnalyticsClient.detectLanguage([text]).then(languageResult => {
-            languageResult.forEach(document => {
-                console.log(`ID: ${document.id}`);
-                console.log(`\tPrimary Language ${document.primaryLanguage.iso6391Name}`);
-            });
             resolve(languageResult[0].primaryLanguage.iso6391Name);
         }).catch(err => {
             console.log(err);
@@ -29,7 +25,7 @@ const getTTS = async (text) => {
     let voiceName = 'en-AU-WilliamNeural';
     const language = await detectLanguage(text);
     if(language === 'fi') voiceName = 'fi-FI-HarriNeural';
-    console.log(`Synthesizing speech for text: ${text} with voice: ${voiceName}`);
+    console.log(`Synthesizing speech for text: ${text} in language ${language} with voice ${voiceName}`);
     speechConfig.speechSynthesisVoiceName = voiceName;
     const synthesizer = new sdk.SpeechSynthesizer(speechConfig);
     return new Promise((resolve, reject) => {
