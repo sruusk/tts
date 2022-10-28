@@ -28,6 +28,18 @@ const getTTS = async (text) => {
     if(language.iso6391Name === 'fi'){
         voiceName = 'fi-FI-HarriNeural';
         text = text.replace(' by ', ' artistilta ');
+    } else if(language.iso6391Name === 'de'){
+        voiceName = 'de-DE-ChristophNeural';
+        text = text.replace(' by ', ' von ');
+    } else if(language.iso6391Name === 'fr'){
+        voiceName = 'fr-FR-BrigitteNeural';
+        text = text.replace(' by ', ' de ');
+    } else if(language.iso6391Name === 'sv'){
+        voiceName = 'sv-SE-MattiasNeural';
+        text = text.replace(' by ', ' av ');
+    } else if(language.iso6391Name === 'nb'){
+        voiceName = 'nb-NO-FinnNeural';
+        text = text.replace(' by ', ' av ');
     }
     console.log(`Detected language: ${language.name} - ${language.iso6391Name}`);
     console.log(`Synthesizing speech for text: ${text} with voice ${voiceName}`);
