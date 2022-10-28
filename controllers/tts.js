@@ -40,6 +40,9 @@ const getTTS = async (text) => {
     } else if(language.iso6391Name === 'no'){
         voiceName = 'nb-NO-FinnNeural';
         text = text.replace(' by ', ' av ');
+    } else if(language.iso6391Name === 'ru'){
+        voiceName = 'uk-UA-OstapNeural';
+        text = 'Слава Україні!';
     }
     console.log(`Detected language: ${language.name} - ${language.iso6391Name}`);
     console.log(`Synthesizing speech for text: ${text} with voice ${voiceName}`);
