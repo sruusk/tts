@@ -37,7 +37,7 @@ const getTTS = async (text) => {
     } else if(language.iso6391Name === 'sv'){
         voiceName = 'sv-SE-MattiasNeural';
         text = text.replace(' by ', ' av ');
-    } else if(language.iso6391Name === 'nb'){
+    } else if(language.iso6391Name === 'no'){
         voiceName = 'nb-NO-FinnNeural';
         text = text.replace(' by ', ' av ');
     }
