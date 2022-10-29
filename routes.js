@@ -77,7 +77,7 @@ const handleRequest = async (request, response) => {
         const text = requestUtils.getQueryParams(request).get('text');
         if(!text){
             console.error('Missing text', url);
-            responseUtils.badRequest(response);
+            return responseUtils.badRequest(response);
         }
         tts.getTTS(text).then((audio) => {
             response.writeHead(200, {
