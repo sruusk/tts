@@ -85,10 +85,10 @@ const handleRequest = async (request, response) => {
                 'Content-Length': audio.readableLength,
                 'Content-Disposition': 'attachment; filename="tts.mp3"'
             });
-            audio.pipe(response, {end: true});
+            return audio.pipe(response, {end: true});
         }).catch((e) => {
             console.error(e);
-            responseUtils.internalServerError(response);
+            return responseUtils.internalServerError(response);
         });
     }
 
