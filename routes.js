@@ -79,19 +79,17 @@ const handleRequest = async (request, response) => {
             console.error('Missing text', url);
             responseUtils.badRequest(response);
         }
-        const stream = await tts.getTTS(text).catch(e => {
+        tts.getTTS(text).then((audio) => {
+            response.writeHead(200, {
+                'Content-Type': 'audio/mpeg',
+                'Content-Length': audio.readableLength,
+                'Content-Disposition': 'attachment; filename="tts.mp3"'
+            });
+            audio.pipe(response, {end: true});
+        }).catch((e) => {
             console.error(e);
             responseUtils.internalServerError(response);
         });
-        if(!stream){
-            responseUtils.internalServerError(response);
-        }
-        response.writeHead(200, {
-            'Content-Type': 'audio/mpeg',
-            'Content-Length': stream.readableLength,
-            'Access-Control-Allow-Origin': '*'
-        });
-        return stream.pipe(response);
     }
 
     if (method.toUpperCase() === 'POST' && !(filePath in allowedMethods)) {
