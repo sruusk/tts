@@ -74,11 +74,6 @@ const handleRequest = async (request, response) => {
     const filePath = new URL(url, `http://${headers.host}`).pathname;
 
     if(filePath.startsWith('/api/tts') && method === 'GET'){
-        if(headers['sec-fetch-dest'] === 'document') {
-            response.writeHead(200, {'Content-Type': 'audio/mpeg'});
-            return response.end();
-        }
-
         const text = requestUtils.getQueryParams(request).get('text');
         if(!text){
             console.error('Missing text', url);
@@ -94,7 +89,8 @@ const handleRequest = async (request, response) => {
         response.writeHead(200, {
             'Content-Type': 'audio/mpeg',
             'Content-Length': stream.readableLength,
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Content-Disposition': 'attachment; filename="tts.mp3"'
         });
         return stream.pipe(response);
     }
