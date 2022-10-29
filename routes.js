@@ -89,8 +89,7 @@ const handleRequest = async (request, response) => {
         response.writeHead(200, {
             'Content-Type': 'audio/mpeg',
             'Content-Length': stream.readableLength,
-            'Access-Control-Allow-Origin': '*',
-            'Content-Disposition': 'attachment; filename="tts.mp3"'
+            'Access-Control-Allow-Origin': '*'
         });
         return stream.pipe(response);
     }
