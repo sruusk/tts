@@ -101,10 +101,6 @@ const handleRequest = async (request, response) => {
         return responseUtils.notFound(response);
     }
 
-    if(filePath === '/api/hello' && method.toUpperCase() === 'GET'){
-        responseUtils.sendJson(response, helloWorldController.getHello());
-    }
-
     // See: http://restcookbook.com/HTTP%20Methods/options/
     if (method.toUpperCase() === 'OPTIONS') return sendOptions(filePath, response);
 
