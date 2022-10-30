@@ -1,6 +1,6 @@
 const { TextAnalyticsClient, AzureKeyCredential } = require("@azure/ai-text-analytics");
 const key = process.env.TEXT_ANALYTICS_KEY;
-const endpoint = 'https://ts3ld.cognitiveservices.azure.com/';
+const endpoint = process.env.TEXT_ANALYTICS_ENDPOINT;
 // Authenticate the client with your key and endpoint
 const textAnalyticsClient = new TextAnalyticsClient(endpoint, new AzureKeyCredential(key));
 
@@ -18,8 +18,7 @@ const detectLanguage = (text) => {
 
 const { PassThrough } = require('stream');
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
-//Find your key and resource region under the 'Keys and Endpoint' tab in your Speech resource in Azure Portal
-const speechConfig = sdk.SpeechConfig.fromSubscription(process.env.SPEECH_KEY, "northeurope");
+const speechConfig = sdk.SpeechConfig.fromSubscription(process.env.SPEECH_KEY, process.env.SPEECH_REGION);
 speechConfig.speechSynthesisOutputFormat = sdk.SpeechSynthesisOutputFormat.Audio48Khz192KBitRateMonoMp3;
 
 const getTTS = async (text) => {
@@ -40,10 +39,8 @@ const getTTS = async (text) => {
     } else if(language.iso6391Name === 'no'){
         voiceName = 'nb-NO-FinnNeural';
         text = text.replace(' by ', ' av ');
-    } else if(language.iso6391Name === 'ru'){
-        voiceName = 'uk-UA-OstapNeural';
-        text = 'Слава Україні!';
     }
+
     console.log(`Detected language: ${language.name} - ${language.iso6391Name}`);
     console.log(`Synthesizing speech for text: ${text} with voice ${voiceName}`);
     speechConfig.speechSynthesisVoiceName = voiceName;
